@@ -1,41 +1,93 @@
-import java.util.Scanner;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
-        String prenom, nom, marqueVoiture, codePostal ;
-        int nbreAccidents, anneeVoiture;
-        double devisBase;
+        Scanner scanner = new Scanner(System.in);
 
-Scanner myScanner = new Scanner(System.in);
-System.out.println();
-private static String (){
+        String prenom = obtenirValeurString(scanner, "Entrez votre prénom : ");
+        String nom = obtenirValeurString(scanner, "Entrez votre nom : ");
+        LocalDate dateNaissance = obtenirDate(scanner, "Entrez votre date de naissance (YYYY-MM-DD) : ");
+        String marqueVoiture = obtenirValeurString(scanner, "Entrez la marque de votre voiture : ");
+        int anneeVoiture = obtenirValeurInt(scanner, "Entrez l'année de votre voiture : ");
+        int nbAccidents = obtenirValeurInt(scanner, "Entrez le nombre d'accidents : ");
 
+        int devis = calculerDevis(50, dateNaissance, marqueVoiture, anneeVoiture, nbAccidents);
+
+        afficherDevis(prenom, nom, marqueVoiture, anneeVoiture, devis);
+
+        scanner.close();
     }
 
-    // Méthode pour obtenir une valeur de type String depuis l'utilisateur
-       private static String obtenirValeurString(Scanner scanner, String message){
-            System.out.print(message);
-            return scanner.nextLine().trim();
-        }
-        private static LocalDate obtenirDate(Scanner scanner, String message){
-            System.out.print(message);
-            String dateString = scanner.nextLine().trim();
+    public static String obtenirValeurString(Scanner scanner, String message) {
+        System.out.print(message);
+        return scanner.nextLine().trim();//couper les espaces dans la saisie de l utilisateur
+    }
 
-            try {
-                return LocalDate.parse(dateString, DateTimeFormatter.ofPattern("yyyy-MM-dd"));//on parse la date car la saisie est un string
-            } catch (Exception e) {
-                System.out.println("Format de date incorrect. Veuillez utiliser le format AAAA-MM-JJ.");
-                return obtenirDate(scanner, message);
+    public static LocalDate obtenirDate(Scanner scanner, String message) {
+        System.out.print(message);
+        String dateString = scanner.nextLine().trim();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return LocalDate.parse(dateString, formatter);
+    }
+
+    public static int obtenirValeurInt(Scanner scanner, String message) {
+        int valeur = 0;
+
+        while (true) {
+            System.out.print(message);
+
+            if (scanner.hasNextInt()) {
+                valeur = scanner.nextInt();
+
+                if (valeur >= 0) {
+                    break; // Sort de la boucle si la saisie est un entier positif
+                } else {
+                    System.err.println("Veuillez saisir un nombre positif.");
+                }
+            } else {
+                System.err.println("Saisie non-numérique. Veuillez saisir un nombre valide.");
+                scanner.next();
             }
         }
 
-        private static double calculerDevis(int prixDeBase, LocalDate dateNaissance, String){
-}
+        return valeur;
     }
-        private static String afficherDevis(String prenom, String nom, String marqueVoiture, int
-        anneeVoiture, int devis){
 
+    public static int calculerDevis(int prixDeBase, LocalDate dateNaissance, String marqueVoiture,
+                                    int anneeVoiture, int nbAccidents) {
+        int devis = prixDeBase;
+
+        if (anneeVoiture < 2010) {
+            devis -= 20;
         }
+
+        boolean marqueLuxe = marqueVoiture.equals("Mercedes") || marqueVoiture.equals("Porsche") ||
+                marqueVoiture.equals("Audi") || marqueVoiture.equals("BMW");
+        if (marqueLuxe) {
+            devis += 25;
+        }
+
+        if (nbAccidents == 0) {
+            devis = prixDeBase;
+        } else if (nbAccidents == 1) {
+            devis += 10;
+        } else {
+            devis += 20;
+        }
+
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.minusYears(25).isBefore(dateNaissance)) {
+            devis += 20;
+        }
+
+        return devis;
     }
+
+    public static void afficherDevis(String prenom, String nom, String marqueVoiture, int anneeVoiture, int devis) {
+        System.out.println(String.format("Bonjour %s %s, nous avons un devis de %d$ pour votre %s %d.",
+                prenom, nom, devis, marqueVoiture, anneeVoiture));
+    }
+}
