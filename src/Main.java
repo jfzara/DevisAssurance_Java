@@ -5,25 +5,25 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);//on crée un scanner pour lire la saisie de l'utilisateur
 
-        String prenom = obtenirValeurString(scanner, "Entrez votre prénom : ");
-        String nom = obtenirValeurString(scanner, "Entrez votre nom : ");
+        String prenom = obtenirValeurString(scanner, "Entrez votre prénom (lettres uniquement): ");
+        String nom = obtenirValeurString(scanner, "Entrez votre nom (lettres uniquement): ");
         LocalDate dateNaissance = obtenirDate(scanner, "Entrez votre date de naissance (YYYY-MM-DD) : ");
-        String marqueVoiture = obtenirValeurString(scanner, "Entrez la marque de votre voiture : ");
-        int anneeVoiture = obtenirValeurInt(scanner, "Entrez l'année de votre voiture : ");
-        int nbAccidents = obtenirValeurInt(scanner, "Entrez le nombre d'accidents : ");
+        String marqueVoiture = obtenirValeurString(scanner, "Entrez la marque de votre voiture (lettres uniquement): ");
+        int anneeVoiture = obtenirValeurInt(scanner, "Entrez l'année de votre voiture (nombres uniquement): ");
+        int nbAccidents = obtenirValeurInt(scanner, "Entrez le nombre d'accidents (nombres positifs uniquement): ");
 
-        int devis = calculerDevis(50, dateNaissance, marqueVoiture, anneeVoiture, nbAccidents);
+        int devis = calculerDevis(50, dateNaissance, marqueVoiture, anneeVoiture, nbAccidents);// on stocke les données saisies dans la variable devis
 
-        afficherDevis(prenom, nom, marqueVoiture, anneeVoiture, devis);
+        afficherDevis(prenom, nom, marqueVoiture, anneeVoiture, devis);// on calcule le devis en affichant les données saisies par l'utilisateur
 
         scanner.close();
     }
 
     public static String obtenirValeurString(Scanner scanner, String message) {
-        System.out.print(message);
-        return scanner.nextLine().trim();//couper les espaces dans la saisie de l utilisateur
+        System.out.print(message);//a chaque information demandée, la console affiche un message correspondant disant a l'utilisateur quoi saisir
+        return scanner.nextLine().trim();//couper les espaces dans la saisie de l utilisateur pour éviter les bugs
     }
 
     public static LocalDate obtenirDate(Scanner scanner, String message) {
@@ -59,6 +59,7 @@ public class Main {
     public static int calculerDevis(int prixDeBase, LocalDate dateNaissance, String marqueVoiture,
                                     int anneeVoiture, int nbAccidents) {
         int devis = prixDeBase;
+
 
         if (anneeVoiture < 2010) {
             devis -= 20;
